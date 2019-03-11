@@ -3,6 +3,10 @@ const config = require('config');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 
+const { ObjectId } = mongoose.Schema.Types;
+
+const { roleSchema } = require('../role');
+
 const MAX_NUMBER_OF_DEVICES_PER_USER = config.get('app.maxNumberOfDevicesPerUser');
 
 const schemaOptions = {
@@ -21,8 +25,25 @@ refreshTokenSchema.methods.isActive = function isActive() {
   return this.get('expiresAt') > Date.now();
 };
 
+const membershipRoleSchema = new mongoose.Schema({
+  id: { type: ObjectId, ref: 'Role' },
+  enabled: { type: Boolean, default: true },
+}, {
+  _id: false,
+});
+
+membershipRoleSchema.virtual('role', {
+  ref: 'Role',
+  localField: 'id',
+  foreignField: '_id',
+  justOne: true,
+});
+
 const userSchema = new mongoose.Schema({
   name: {
+    type: String,
+  },
+  ci: {
     type: String,
   },
   smAccountName: {
@@ -30,6 +51,9 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   email: {
+    type: String,
+  },
+  phone: {
     type: String,
   },
   account: {
@@ -56,6 +80,8 @@ const userSchema = new mongoose.Schema({
     },
   },
   refreshTokens: [refreshTokenSchema],
+  roles: [membershipRoleSchema],
+  entitlements: [{ type: ObjectId, ref: 'Entitlement' }],
 }, schemaOptions);
 
 userSchema.pre('save', function preSave(next) {
