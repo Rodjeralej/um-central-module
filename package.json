@@ -1,0 +1,41 @@
+{
+  "name": "um-central-module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint .",
+    "start": "UM_SERVICE=Auth node lib/index.js",
+    "dev": "UM_SERVICE=Auth . local-scripts/development-local.sh && nodemon --inspect lib/index.js",
+    "test": ". ./tests/setup.sh && ./node_modules/.bin/mocha --recursive --timeout=10000 tests --exit",
+    "test-spec": "nyc --reporter=none npm test",
+    "coverage": "nyc report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^2.2.3",
+    "async": "^2.6.2",
+    "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.0.1",
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "joi-objectid": "^2.0.0",
+    "jsonwebtoken": "^8.5.0",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-joi-router": "^5.2.0",
+    "koa-jwt": "^3.5.1",
+    "koa-sslify": "^4.0.3",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.11",
+    "nodemon": "^1.18.10",
+    "require-directory": "^2.1.1",
+    "uuid": "^3.3.2"
+  }
+}
