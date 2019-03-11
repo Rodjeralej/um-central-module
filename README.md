@@ -16,6 +16,6 @@ Par poder correr el proyecto hace falta configurar las variables de entorno de l
 
 ## Install and run
 
-Preferentemente usar **yarn** de la sigiente manera
+Preferentemente usar **yarn** de la siguiente manera
 
     yarn install && yarn dev
