@@ -184,6 +184,11 @@ userSchema.methods.isDisabled = function isDisabled() {
   return this.getStatus() === 'disabled';
 };
 
+userSchema.methods.enableEntitlements = function addEntitlements(entitlementsIds) {
+  this.entitlements = _.union(this.entitlements.map(e => e.toString()), entitlementsIds);
+  return this.save();
+};
+
 // ---------
 //  STATICS
 // ---------
@@ -222,6 +227,7 @@ userSchema.static('sanitize', async (userDoc) => {
     'name',
     'account',
     'smAccountName',
+    'ci',
   ];
   const data = _.pick(user, fieldsToPick);
   // data.status = _.get(user, 'account.status');

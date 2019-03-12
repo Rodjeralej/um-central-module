@@ -16,15 +16,17 @@ module.exports = {
     },
   },
   handler: async (ctx) => {
-    const { payload: newUser } = ctx.request.body;
+    const { user: { _id } } = ctx.state.jwt;
+    let { payload: newUser } = ctx.request.body;
 
     const oldUser = await User.findOne({ ci: newUser.ci });
-    ctx.assert(!oldUser, 400, 'User already exist, CI in use');
+    if (oldUser) {
+      ctx.throw(400, 'User already exist, CI in use');
+    }
 
-    const { email, name, ci, phone } = newUser;
+    newUser = { ...newUser, account: { status: 'enabled' } };
 
-    const user = new User({ email, name, ci, phone });
-    await user.save();
+    const user = await User.findOneAndUpdate({ _id }, { ...newUser }, { new: true });
 
     ctx.body = await User.sanitize(user);
     ctx.status = 201;
