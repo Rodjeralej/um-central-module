@@ -7,6 +7,7 @@ const router = require('koa-joi-router');
 
 const publicRoutes = require('./public');
 const usersRoutes = require('./users');
+const entitlementsRoutes = require('./entitlements');
 
 const pub = router();
 pub.prefix('/');
@@ -16,9 +17,14 @@ const users = router();
 users.prefix('/users');
 users.route(usersRoutes);
 
+const entitlements = router();
+entitlements.prefix('/entitlements');
+entitlements.route(entitlementsRoutes);
+
 const routes = {
   pub,
   users,
+  entitlements,
 };
 
 module.exports = routes;

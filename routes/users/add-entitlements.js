@@ -11,6 +11,7 @@ const addEntitlementsHandler = async (ctx) => {
   await user.enableEntitlements(entitlementsIds);
 
   ctx.status = 204;
+  ctx.body = 'Entitlements added succesfully!!';
 };
 
 module.exports = {

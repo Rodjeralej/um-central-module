@@ -6,7 +6,7 @@ module.exports = {
   path: '/',
   validate: {
     type: 'json',
-    body: Joi.object().key({
+    body: Joi.object().keys({
       father: Joi.string(),
       name: Joi.string().required(),
     }),
@@ -14,7 +14,7 @@ module.exports = {
   handler: async (ctx) => {
     const { father, name } = ctx.request.body;
 
-    const prevEntitlement = Entitlement.find({ name });
+    const prevEntitlement = await Entitlement.findOne({ name });
     if (prevEntitlement) {
       ctx.throw(400, 'Entitlement already exist');
     }
