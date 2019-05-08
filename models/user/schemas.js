@@ -5,7 +5,6 @@ const _ = require('lodash');
 
 const { ObjectId } = mongoose.Schema.Types;
 
-const { roleSchema } = require('../role');
 
 const MAX_NUMBER_OF_DEVICES_PER_USER = config.get('app.maxNumberOfDevicesPerUser');
 
@@ -37,6 +36,35 @@ membershipRoleSchema.virtual('role', {
   localField: 'id',
   foreignField: '_id',
   justOne: true,
+});
+
+const deviceSchema = new mongoose.Schema({
+
+  type: Object,
+  required: false,
+  name: {
+    type: String,
+    required: true,
+  },
+  deviceType: {
+    type: Number,
+    required: true,
+  },
+
+  mac: {
+    type: String,
+    required: true,
+  },
+  modifiedData: {
+    type: Date,
+
+  },
+  isEnabled: {
+    type: Boolean,
+    required: true,
+  },
+
+
 });
 
 const userSchema = new mongoose.Schema({
@@ -82,7 +110,10 @@ const userSchema = new mongoose.Schema({
   refreshTokens: [refreshTokenSchema],
   roles: [membershipRoleSchema],
   entitlements: [{ type: ObjectId, ref: 'Entitlement' }],
+  devices: [deviceSchema],
+
 }, schemaOptions);
+
 
 userSchema.pre('save', function preSave(next) {
   const user = this;
@@ -119,6 +150,7 @@ function compareToHash(attempt, hash) {
     });
   });
 }
+
 
 userSchema.methods.comparePassword = function comparePassword(attempt) {
   const hash = this.get('password');
@@ -188,6 +220,7 @@ userSchema.methods.enableEntitlements = function addEntitlements(entitlementsIds
   this.entitlements = _.union(this.entitlements.map(e => e.toString()), entitlementsIds);
   return this.save();
 };
+
 
 // ---------
 //  STATICS
