@@ -6,8 +6,7 @@ const _ = require('lodash');
 const { ObjectId } = mongoose.Schema.Types;
 
 
-const MAX_NUMBER_OF_DEVICES_PER_USER = config.get('app.maxNumberOfDevicesPerUser');
-
+const MAX_NUMBER_OF_DEVICES_PER_USER = config.app.maxNumberOfDevicesPerUser;
 const schemaOptions = {
   strict: false,
 };
@@ -24,11 +23,10 @@ refreshTokenSchema.methods.isActive = function isActive() {
   return this.get('expiresAt') > Date.now();
 };
 
+/*
 const membershipRoleSchema = new mongoose.Schema({
   id: { type: ObjectId, ref: 'Role' },
   enabled: { type: Boolean, default: true },
-}, {
-  _id: false,
 });
 
 membershipRoleSchema.virtual('role', {
@@ -37,6 +35,8 @@ membershipRoleSchema.virtual('role', {
   foreignField: '_id',
   justOne: true,
 });
+
+ */
 
 const deviceSchema = new mongoose.Schema({
 
@@ -108,7 +108,7 @@ const userSchema = new mongoose.Schema({
     },
   },
   refreshTokens: [refreshTokenSchema],
-  roles: [membershipRoleSchema],
+  roles: [{ type: ObjectId, ref: 'Role' }],
   entitlements: [{ type: ObjectId, ref: 'Entitlement' }],
   devices: [deviceSchema],
 
@@ -261,6 +261,8 @@ userSchema.static('sanitize', async (userDoc) => {
     'account',
     'smAccountName',
     'ci',
+    'entitlements',
+    'roles',
   ];
   const data = _.pick(user, fieldsToPick);
   // data.status = _.get(user, 'account.status');

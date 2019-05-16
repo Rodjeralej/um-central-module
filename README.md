@@ -90,3 +90,34 @@ module.exports = {
   },
 };
 ```
+
+#add entitlements
+```
+module.exports = {
+  method: 'post',
+  path: '/:userId/entitlements',
+  validate: {
+    type: 'json',
+    params: {
+      userId: Joi.objectId(),
+    },
+    body: {
+      entitlementsIds: Joi.array().items(Joi.objectId()).required(),
+    },
+  },
+```
+
+#add roles
+```
+module.exports = {
+  method: 'post',
+  path: '/:userId/add-role/:roleId',
+  validate: {
+    type: 'json',
+    params: {
+      roleId: Joi.objectId(),
+      userId: Joi.objectId(),
+    },
+
+  },
+```
