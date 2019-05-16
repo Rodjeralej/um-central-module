@@ -91,7 +91,7 @@ module.exports = {
 };
 ```
 
-#add entitlements
+## add entitlements
 ```
 module.exports = {
   method: 'post',
@@ -107,7 +107,7 @@ module.exports = {
   },
 ```
 
-#add roles
+## add roles
 ```
 module.exports = {
   method: 'post',
